@@ -1,6 +1,7 @@
 import React, { /*useState,*/ Component } from "react";
 import "./App.css";
 import Person from "./Person/Person";
+import Radium, { StyleRoot } from "radium";
 
 class App extends Component {
   state = {
@@ -56,11 +57,16 @@ class App extends Component {
   };
   render() {
     const style = {
-      backgroundColor: "yellow",
+      backgroundColor: "green",
+      color: "white",
       font: "inherit",
       border: "2px solid blue",
       padding: "10px",
       cursor: "pointer",
+      ":hover": {
+        backgroundColor: "lightgreen",
+        color: "black",
+      },
     };
 
     let humans = null;
@@ -81,21 +87,37 @@ class App extends Component {
           })}
         </div>
       );
+
+      style.backgroundColor = "red";
+      style[":hover"] = {
+        backgroundColor: "salmon",
+        color: "black",
+      };
+    }
+
+    let classes = [];
+    if (this.state.humans.length <= 2) {
+      classes.push("red"); //classes = ['red']
+    }
+    if (this.state.humans.length <= 1) {
+      classes.push("bold"); //classes = ['red','bold']
     }
 
     return (
-      <div className="App">
-        <h1>Hi, I'm a React app</h1>
-        <p>This is realy working! </p>
-        <div></div>
-        <button onClick={this.togglePersonsHandler} style={style}>
-          Switch name
-        </button>
-        {humans}
-      </div>
+      <StyleRoot>
+        <div className="App">
+          <h1>Hi, I'm a React app</h1>
+          <p className={classes.join(" ")}>This is realy working! </p>
+          <div></div>
+          <button onClick={this.togglePersonsHandler} style={style}>
+            Switch name
+          </button>
+          {humans}
+        </div>
+      </StyleRoot>
     );
   }
   //return React.createElement('div',{className: 'App'}, React.createElement('h1',null, 'Does it work now?'));
 }
 
-export default App;
+export default Radium(App);
